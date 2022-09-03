@@ -16,10 +16,10 @@ token = os.getenv("TOKEN")
 updater = Updater(token=token)
 URL = ""
 
-def wake_up(update, contex):
+def wake_up(update, context):
     chat = update.effective_chat
 
-    contex.bot.send_message(
+    context.bot.send_message(
         chat_id=chat.id,
         text="Hi, my name is Naked Cook",
     )
