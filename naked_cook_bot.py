@@ -13,31 +13,41 @@ dotenv.load_dotenv()
 
 token = os.getenv("TOKEN")
 updater = Updater(token=token)
-URL = ""
+URL = "https://rapidapi.com/spoonacular/api/recipe-food-nutrition"
 
 
-buttons = ReplyKeyboardMarkup([['Завтрак', 'Обед', 'Ужин']])
-reply_markup = buttons
-
-
-def for_errors(update, context):
-    updater.start_polling()
-    updater.idle()
+def new_recipe():
+    response = requests.get(URL).json()
+    return response[0].get("url")
 
 
 def wake_up(update, context):
     chat = update.effective_chat
+    buttons = ReplyKeyboardMarkup([['Завтрак'], ['Обед'], ['Ужин']])
     
     if chat.last_name is None:
         context.bot.send_message(
             chat_id=chat.id,
             text="Привет {}".format(chat.first_name),
+            reply_markup=button
         )
     else:
         context.bot.send_message(
             chat_id=chat.id,
             text="Привет {} {}".format(chat.first_name, chat.last_name),
+            reply_markup=button
         )
+
+
+def for_errors(update, context):
+    chat = update.effective_chat
+    button = ReplyKeyboardMarkup([['/start']])
+
+    context.bot.send_message(
+        chat_id=chat.id,
+        text=f"К сожалению, я не смог распознать твою команду:(\nПопробуй команду ниже;)",
+        reply_markup=button
+    )
 
 
 def TextHandler(update, context):
@@ -47,13 +57,15 @@ def TextHandler(update, context):
             chat_id=chat.id,
             text='Рецептов нету, но есть фотки котиков :)'
         )
-        newrecipe()
+        context.bot.send_photo(chat.id, newrecipe)
     else:
-        for_errors()
+      for_errors()
 
 
-updater.dispatcher.add_handler(CommandHandler('start', wake_up))
+updater.dispatcher.add_handler(CommandHandler("start", wake_up))
 updater.dispatcher.add_handler(MessageHandler(Filters.text, TextHandler))
+updater.dispatcher.add_handler(MessageHandler(Filters.all, for_errors))
+
 updater.start_polling()
 updater.idle()
 
