@@ -14,11 +14,12 @@ dotenv.load_dotenv()
 
 token = os.getenv("TOKEN")
 updater = Updater(token=token)
-URL = "https://spoonacular.com"
+URL = "https://rapidapi.com/spoonacular/api/recipe-food-nutrition"
 
 
 def new_recipe():
-    pass
+    response = requests.get(URL).json()
+    return response[0].get("url")
 
 
 def wake_up(update, context):
@@ -36,13 +37,17 @@ def wake_up(update, context):
 
 
 def for_errors(update, context):
-    pass
+    chat = update.effective_chat
+    button = ReplyKeyboardMarkup([['/start']])
 
-    updater.start_polling()
-    updater.idle()
+    context.bot.send_message(
+        chat_id=chat.id,
+        text=f"К сожалению, я не смог распознать твою команду:(\nПопробуй команду ниже;)",
+        reply_markup=button
+    )
 
 
 updater.dispatcher.add_handler(CommandHandler("start", wake_up))
-updater.dispatcher.add_handler(MessageHandler(Filters.text, for_errors))
+updater.dispatcher.add_handler(MessageHandler(Filters.all, for_errors))
 updater.start_polling()
 updater.idle()
