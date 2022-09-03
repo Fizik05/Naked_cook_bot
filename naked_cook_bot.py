@@ -14,7 +14,11 @@ dotenv.load_dotenv()
 
 token = os.getenv("TOKEN")
 updater = Updater(token=token)
-URL = ""
+URL = "https://spoonacular.com"
+
+
+def new_recipe():
+    pass
 
 
 def wake_up(update, context):
