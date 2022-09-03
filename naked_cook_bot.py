@@ -16,7 +16,7 @@ updater = Updater(token=token)
 URL = "https://rapidapi.com/spoonacular/api/recipe-food-nutrition"
 
 
-def new_recipe():
+def new_cat():
     response = requests.get(URL).json()
     return response[0].get("url")
 
@@ -57,7 +57,7 @@ def TextHandler(update, context):
             chat_id=chat.id,
             text='Рецептов нету, но есть фотки котиков :)'
         )
-        context.bot.send_photo(chat.id, newrecipe)
+        context.bot.send_photo(chat.id, newcat)
     else:
       for_errors()
 
