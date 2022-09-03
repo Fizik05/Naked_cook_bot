@@ -6,7 +6,11 @@ import requests
 from telegram import ReplyKeyboardMarkup
 from telegram.ext import (Updater,
                           Filters,
+<<<<<<< Updated upstream
                           MessageHandler,
+=======
+                          MessageFilter,
+>>>>>>> Stashed changes
                           CommandHandler)
 
 
@@ -16,6 +20,7 @@ token = os.getenv("TOKEN")
 updater = Updater(token=token)
 URL = ""
 
+<<<<<<< Updated upstream
 
 def wake_up(update, context):
     chat = update.effective_chat
@@ -42,3 +47,21 @@ updater.dispatcher.add_handler(CommandHandler("start", wake_up))
 updater.dispatcher.add_handler(MessageHandler(Filters.text, for_errors))
 updater.start_polling()
 updater.idle()
+=======
+def wake_up(update, context):
+    chat = update.effective_chat
+
+    context.bot.send_message(
+        chat_id=chat.id,
+        text="Hi, my name is Naked Cook",
+    )
+
+
+def main():
+    updater.dispatcher.add_handler(CommandHandler("start", wake_up))
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == "__main__":
+    main()
+>>>>>>> Stashed changes
