@@ -2,6 +2,7 @@ import os
 
 import dotenv
 import requests
+
 from telegram import ReplyKeyboardMarkup
 from telegram.ext import (Updater,
                           Filters,
@@ -27,8 +28,8 @@ def wake_up(update, contex):
 def main():
     updater.dispatcher.add_handler(CommandHandler("start", wake_up))
 
+    updater.start_polling()
+    updater.idle()
 
-# if __name__ == "__main__":
-#     main()
-
-main()
+if __name__ == "__main__":
+    main()
