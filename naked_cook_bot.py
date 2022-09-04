@@ -51,14 +51,14 @@ def for_errors(update, context):
 
 
 def TextHandler(update, context):
-    id = update.effective_chat
+    id = update.effective_chat.id
     chat = update.message.text
     if 'Завтрак' in chat or 'Обед' in chat or 'Ужин' in chat:
         context.bot.send_message(
-            chat_id=id.id,
+            chat_id=id,
             text='Рецептов нету, но есть фотки котиков :)'
         )
-        context.bot.send_photo(id.id, new_cat())
+        context.bot.send_photo(id, new_cat())
     else:
         for_errors(update, context)
 
