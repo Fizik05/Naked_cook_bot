@@ -2,17 +2,24 @@ import os
 
 import dotenv
 import requests
+import random
 from telegram import ReplyKeyboardMarkup
 from telegram.ext import (Updater,
                           Filters,
                           MessageHandler,
                           CommandHandler)
 
+import parser
+
 
 dotenv.load_dotenv()
 
 token = os.getenv("TOKEN")
 updater = Updater(token=token)
+
+
+def Get_URL(url):
+    return requests.get(url).text
 
 
 def wake_up(update, context):
@@ -35,20 +42,25 @@ def wake_up(update, context):
 
 def breakfast(update, context):
     id = update.effective_chat.id
+    url = random.choice(recipes_breakfast)
+    response = Get_URL(url)
 
     context.bot.send_message(
         id,
-        text=Ingredients
+        text=parser.GettingName(response)
     )
     context.bot.send_message(
         id,
-        text=Recipe
+        text=parser.GettingIngridients(response)
     )
-    context.bot.send_message(
-        id,
-        text=Photo
-    )
-
+    # context.bot.send_message(
+    #     id,
+    #     text=Recipe
+    # )
+    # context.bot.send_message(
+    #     id,
+    #     text=Photo
+    # )
 
 
 def lunch(update, context):
