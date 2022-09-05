@@ -14,4 +14,8 @@ tzdata==2022.2
 tzlocal==4.2
 urllib3==1.26.12
 beautifulsoup4==4.11.1
+<<<<<<< HEAD
 bs4==0.0.1
+=======
+bs4==0.0.1
+>>>>>>> upstream/main
