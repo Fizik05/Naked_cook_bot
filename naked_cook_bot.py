@@ -39,6 +39,18 @@ def wake_up(update, context):
         )
 
 
+def breakfast(update, context):
+    pass
+
+
+def lunch(update, context):
+    pass
+
+
+def dinner(update, context):
+    pass
+
+
 def for_errors(update, context):
     chat = update.effective_chat
     button = ReplyKeyboardMarkup([['/start']], resize_keyboard=True)
@@ -51,14 +63,9 @@ def for_errors(update, context):
 
 
 def TextHandler(update, context):
-    id = update.effective_chat.id
     chat = update.message.text
-    if 'Завтрак' in chat or 'Обед' in chat or 'Ужин' in chat:
-        context.bot.send_message(
-            chat_id=id,
-            text='Рецептов нету, но есть фотки котиков :)'
-        )
-        context.bot.send_photo(id, new_cat())
+    if 'Завтрак' in chat:
+        breakfast(update, context)
     else:
         for_errors(update, context)
 
