@@ -1,5 +1,4 @@
 from types import NoneType
-import requests
 from bs4 import BeautifulSoup
 
 
@@ -9,25 +8,25 @@ class Step:
         self.description = ""
 
 
-link = "https://1000.menu/cooking/42927-krabovye-palochki-s-syrom-i-yaicom-zakuska"
-responce = requests.get(link).text
+#link = "https://1000.menu/cooking/42927-krabovye-palochki-s-syrom-i-yaicom-zakuska"
+
 
 def GettingSoup(responce):
-    """обязательная хуйня"""
+    """Обязательная хуйня."""
     return BeautifulSoup(responce, 'html.parser')
 
 
 def GettingName():
-    """получение имени"""
+    """Получение названия."""
     soup = GettingSoup(responce=responce)
     main = soup.find('div', id='main')
     main1 = main.find('div', class_="container wrap columns is-centered")
-    main2 = main1.find('main', class_= "column is-relative is-centered")
+    main2 = main1.find('main', class_="column is-relative is-centered")
     return main2.find('h1').text
 
 
 def GettingRightHalf():
-    """обязательная хуйня"""
+    """Обязательная хуйня."""
     soup = GettingSoup(responce=responce)
     main = soup.find('div', id='main')
     main1 = main.find('div', class_="container wrap columns is-centered")
@@ -36,7 +35,7 @@ def GettingRightHalf():
 
 
 def GettingIngridients():
-    """возвращаем массив с ингридиентами"""
+    """Возвращаем массив с ингридиентами."""
     columns = GettingRightHalf()
     for i in columns:
         half = i
@@ -45,11 +44,15 @@ def GettingIngridients():
     ingrs = []
     for tag in metacont:
         ingrs.append(tag.get('content'))
-    return ingrs #
+
+    result = ""
+    for i in ingrs:
+        result += i + "\n"
+    return result
 
 
 def GettingNumServings():
-    """возвращаем кол-во порций"""
+    """Возвращаем кол-во порций."""
     columns = GettingRightHalf()
     for i in columns:
         half = i
@@ -57,12 +60,12 @@ def GettingNumServings():
 
 
 def GettingSteps():
-    """возвращаем шаги с картинками"""
+    """Возвращаем шаги с картинками."""
     soup = GettingSoup(responce=responce)
     main = soup.find('div', id='main')
     main1 = main.find('div', class_="container wrap columns is-centered")
     cont = main1.find('div', class_='content')
-    sect = cont.find('section', id = "pt_steps")
+    sect = cont.find('section', id="pt_steps")
     ol = sect.find('ol', class_='instructions')
     Steps = []
     for step in ol:
@@ -78,20 +81,19 @@ def GettingSteps():
 
 
 def WritingToFile():
-    """запись в файл"""
+    """Запись в файл."""
     with open("D:/123/ingrs.txt", 'w', encoding='utf-8') as f:
-            f.write(GettingName() + '\n')
-            f.write('' + '\n')
-            f.write("Получится "+GettingNumServings()+" порций"+'\n')
-            f.write('' + '\n')
-            ingrs = GettingIngridients()
-            for i in ingrs:
-                f.write(i+'\n')
-            f.write('' + '\n')
-            steps = GettingSteps()
-            for i in steps:
-                f.write(i.image+' '+i.description+'\n')
-
+        f.write(GettingName() + '\n')
+        f.write('' + '\n')
+        f.write("Получится "+GettingNumServings()+" порций"+'\n')
+        f.write('' + '\n')
+        ingrs = GettingIngridients()
+        for i in ingrs:
+            f.write(i+'\n')
+        f.write('' + '\n')
+        steps = GettingSteps()
+        for i in steps:
+            f.write(i.image+' '+i.description+'\n')
 
 
 WritingToFile()
