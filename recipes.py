@@ -1,0 +1,3 @@
+recipes_breakfast = ['https://1000.menu/cooking/39379-syrniki-iz-tvoroga-s-mukoi-na-skovorode', 'https://1000.menu/cooking/52657-yaichnica-glazunya', 'https://1000.menu/cooking/35696-kabachki-v-muke-na-skovorode', 'https://1000.menu/cooking/20261-picca-na-skovorode-za-10-minut-na-smetane', 'https://1000.menu/cooking/28828-grenki-s-syrom-i-yaicom-na-skovorode', 'https://1000.menu/cooking/29354-pshennaya-kasha-v-kastrule-na-moloke', 'https://1000.menu/cooking/45893-skrembl-iz-yaic-klassicheskii', '']
+recipes_lunch = []
+recipes_dinner = []

