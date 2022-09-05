@@ -13,12 +13,6 @@ dotenv.load_dotenv()
 
 token = os.getenv("TOKEN")
 updater = Updater(token=token)
-URL = "https://api.thecatapi.com/v1/images/search"
-
-
-def new_cat():
-    response = requests.get(URL).json()
-    return response[0].get("url")
 
 
 def wake_up(update, context):
@@ -40,7 +34,21 @@ def wake_up(update, context):
 
 
 def breakfast(update, context):
-    pass
+    id = update.effective_chat.id
+
+    context.bot.send_message(
+        id,
+        text=Ingredients
+    )
+    context.bot.send_message(
+        id,
+        text=Recipe
+    )
+    context.bot.send_message(
+        id,
+        text=Photo
+    )
+
 
 
 def lunch(update, context):
