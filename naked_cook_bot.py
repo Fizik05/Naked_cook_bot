@@ -39,21 +39,26 @@ def wake_up(update, context):
         )
 
 
+def breakfast(update, context):
+    pass
+
+
+def lunch(update, context):
+    pass
+
+
+def dinner(update, context):
+    pass
+
+
 def for_errors(update, context):
     chat = update.effective_chat
     button = ReplyKeyboardMarkup([['/start']], resize_keyboard=True)
-
-    context.bot.send_message(
-        chat_id=chat.id,
-        text=f"К сожалению, я не смог распознать твою команду:(\nПопробуй команду ниже;)",
-        reply_markup=button
-    )
 
 
 def TextHandler(update, context):
     id = update.effective_chat.id
     chat = update.message.text
-    print(update)
     if 'Завтрак' in chat:
         context.bot.send_message(
             chat_id=id,
