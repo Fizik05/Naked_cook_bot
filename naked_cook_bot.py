@@ -63,6 +63,12 @@ def for_errors(update, context):
     chat = update.effective_chat
     button = ReplyKeyboardMarkup([['/start']], resize_keyboard=True)
 
+    context.bot.send_message(
+        chat_id=chat.id,
+        text="К сожалению, я не смог распознать твою команду:(\nПопробуй команду ниже;)",
+        reply_markup=button
+    )
+
 
 def TextHandler(update, context):
     id = update.effective_chat.id
@@ -78,7 +84,13 @@ def TextHandler(update, context):
             chat_id=id,
             text='Добрый день. \nПриготовим что-нибудь вкусненькое ;)\nСегодня у нас: '
         )
-        lunch(update, context)   
+        lunch(update, context)
+    elif 'Ужин' in chat:
+        context.bot.send_message(
+            chat_id=id,
+            text='И снова привет. \nНачнём готовить)'
+        )
+        dinner(update, context)       
     else:
         for_errors(update, context)
 
