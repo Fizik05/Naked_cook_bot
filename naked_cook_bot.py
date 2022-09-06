@@ -10,6 +10,7 @@ from telegram.ext import (Updater,
                           CommandHandler)
 
 import parser
+import recipes
 
 
 dotenv.load_dotenv()
@@ -42,7 +43,7 @@ def wake_up(update, context):
 
 def breakfast(update, context):
     id = update.effective_chat.id
-    url = random.choice(recipes_breakfast)
+    url = random.choice(recipes.recipes_breakfast)
     response = Get_URL(url)
 
     context.bot.send_message(
@@ -55,7 +56,7 @@ def breakfast(update, context):
     )
     # context.bot.send_message(
     #     id,
-    #     text=Recipe
+    #     text=parser.GettingSteps(response)
     # )
     # context.bot.send_message(
     #     id,
@@ -102,7 +103,7 @@ def TextHandler(update, context):
             chat_id=id,
             text='И снова привет. \nНачнём готовить)'
         )
-        dinner(update, context)       
+        dinner(update, context)
     else:
         for_errors(update, context)
 

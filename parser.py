@@ -8,35 +8,32 @@ class Step:
         self.description = ""
 
 
-#link = "https://1000.menu/cooking/42927-krabovye-palochki-s-syrom-i-yaicom-zakuska"
-
-
-def GettingSoup(responce):
+def GettingSoup(response):
     """Обязательная хуйня."""
-    return BeautifulSoup(responce, 'html.parser')
+    return BeautifulSoup(response, 'html.parser')
 
 
-def GettingName():
+def GettingName(response):
     """Получение названия."""
-    soup = GettingSoup(responce=responce)
+    soup = GettingSoup(response)
     main = soup.find('div', id='main')
     main1 = main.find('div', class_="container wrap columns is-centered")
     main2 = main1.find('main', class_="column is-relative is-centered")
     return main2.find('h1').text
 
 
-def GettingRightHalf():
+def GettingRightHalf(response):
     """Обязательная хуйня."""
-    soup = GettingSoup(responce=responce)
+    soup = GettingSoup(response)
     main = soup.find('div', id='main')
     main1 = main.find('div', class_="container wrap columns is-centered")
     cont = main1.find('div', class_='content')
     return cont.find('div', class_="recipe-top columns")
 
 
-def GettingIngridients():
+def GettingIngridients(response):
     """Возвращаем массив с ингридиентами."""
-    columns = GettingRightHalf()
+    columns = GettingRightHalf(response)
     for i in columns:
         half = i
     metacont = half.find_all('meta')
@@ -51,17 +48,17 @@ def GettingIngridients():
     return result
 
 
-def GettingNumServings():
+def GettingNumServings(response):
     """Возвращаем кол-во порций."""
-    columns = GettingRightHalf()
+    columns = GettingRightHalf(response)
     for i in columns:
         half = i
     return half.find('div', id="kolvo_porcij_switcher_c").find('input').get('value')
 
 
-def GettingSteps():
+def GettingSteps(response):
     """Возвращаем шаги с картинками."""
-    soup = GettingSoup(responce=responce)
+    soup = GettingSoup(response)
     main = soup.find('div', id='main')
     main1 = main.find('div', class_="container wrap columns is-centered")
     cont = main1.find('div', class_='content')
@@ -80,12 +77,12 @@ def GettingSteps():
     return Steps
 
 
-def WritingToFile():
+def WritingToFile(response):
     """Запись в файл."""
     with open("D:/123/ingrs.txt", 'w', encoding='utf-8') as f:
-        f.write(GettingName() + '\n')
+        f.write(GettingName(response) + '\n')
         f.write('' + '\n')
-        f.write("Получится "+GettingNumServings()+" порций"+'\n')
+        f.write("Получится " + GettingNumServings(response) + " порций"+'\n')
         f.write('' + '\n')
         ingrs = GettingIngridients()
         for i in ingrs:
@@ -96,4 +93,9 @@ def WritingToFile():
             f.write(i.image+' '+i.description+'\n')
 
 
-WritingToFile()
+def main():
+    WritingToFile()
+
+
+if __name__ == "__main__":
+    main()
