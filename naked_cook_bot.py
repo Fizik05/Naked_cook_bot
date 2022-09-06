@@ -17,7 +17,7 @@ dotenv.load_dotenv()
 
 token = os.getenv("TOKEN")
 updater = Updater(token=token)
-array = []
+dictionary = {}
 
 
 # def steal(update, context):
@@ -54,8 +54,9 @@ def wake_up(update, context):
         )
 
 
-def start_cooking(arr, upd, context):
+def start_cooking(upd, context):
     id = upd.effective_chat.id
+    arr = dictionary[id]
     if arr == []:
         button = ReplyKeyboardMarkup([["/start"]], resize_keyboard=True)
         context.bot.send_message(
@@ -67,7 +68,7 @@ def start_cooking(arr, upd, context):
         text = arr[0][0]
         image = "https:" + arr[0][1]
         print(image)
-        del array[0]
+        del dictionary[id][0]
 
         context.bot.send_message(
             id,
@@ -152,7 +153,7 @@ def TextHandler(update, context):
         )
         dinner(update, context)
     elif 'Следующий шаг' in chat:
-        start_cooking(array, update, context)
+        start_cooking(update, context)
     elif "Закончить готовку" in chat:
         button = ReplyKeyboardMarkup([["/start"]], resize_keyboard=True)
         context.bot.send_message(
