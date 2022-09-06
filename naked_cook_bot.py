@@ -17,7 +17,7 @@ dotenv.load_dotenv()
 
 token = os.getenv("TOKEN")
 updater = Updater(token=token)
-array = []
+dictionary = {}
 
 
 # def steal(update, context):
@@ -54,9 +54,11 @@ def wake_up(update, context):
         )
 
 
-def start_cooking(arr, upd, context):
+def start_cooking(upd, context):
     id = upd.effective_chat.id
+    arr = dictionary[id]
     if arr == []:
+        del dictionary[id]
         button = ReplyKeyboardMarkup([["/start"]])
         context.bot.send_message(
             id,
@@ -67,7 +69,7 @@ def start_cooking(arr, upd, context):
         text = arr[0][0]
         image = "https:" + arr[0][1]
         print(image)
-        del array[0]
+        del dictionary[id][0]
 
         context.bot.send_message(
             id,
@@ -87,10 +89,12 @@ def breakfast(update, context):
                                   ["Закончить готовку"]],
                                  resize_keyboard=True)
     instruction = parser.GettingSteps(response)
+    array = []
 
     for i in instruction:
         array.append([i.description, i.image])
 
+    dictionary[id] = array
     context.bot.send_message(
         id,
         text=parser.GettingName(response)
@@ -100,7 +104,7 @@ def breakfast(update, context):
         text=parser.GettingIngridients(response),
         reply_markup=button
     )
-    start_cooking(array, update, context)
+    start_cooking(update, context)
 
 
 def lunch(update, context):
@@ -144,7 +148,7 @@ def TextHandler(update, context):
         )
         dinner(update, context)
     elif 'Следующий шаг' in chat:
-        start_cooking(array, update, context)
+        start_cooking(update, context)
     elif "Закончить готовку" in chat:
         context.bot.send_message(
             chat_id=id,
