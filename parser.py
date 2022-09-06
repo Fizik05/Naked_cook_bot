@@ -53,7 +53,8 @@ def GettingNumServings(response):
     columns = GettingRightHalf(response)
     for i in columns:
         half = i
-    return half.find('div', id="kolvo_porcij_switcher_c").find('input').get('value')
+    return half.find('div',
+                     id="kolvo_porcij_switcher_c").find('input').get('value')
 
 
 def GettingSteps(response):
