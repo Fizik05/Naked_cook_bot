@@ -1,3 +1,4 @@
+from logging.config import dictConfig
 import os
 
 import dotenv
@@ -67,7 +68,6 @@ def start_cooking(upd, context):
     else:
         text = arr[0][0]
         image = "https:" + arr[0][1]
-        print(image)
         del dictionary[id][0]
 
         context.bot.send_message(
@@ -89,6 +89,7 @@ def breakfast(update, context):
                                       ["Закончить готовку"]],
                                      resize_keyboard=True)
         instruction = parser.GettingSteps(response)
+        array = []
 
         for i in instruction:
             array.append([i.description, i.image])
@@ -102,8 +103,11 @@ def breakfast(update, context):
             text=parser.GettingIngridients(response),
             reply_markup=button
         )
-        start_cooking(array, update, context)
-    except:
+        dictionary[id] = array
+        del array
+        start_cooking(update, context)
+    except Exception as exs:
+        print(exs)
         button = ReplyKeyboardMarkup([["/start"]], resize_keyboard=True)
         context.bot.send_message(
             id,
@@ -161,6 +165,7 @@ def TextHandler(update, context):
             text="Надеюсь тебе понравилось)\nЧтобы попробовать ещё раз введи команду  '/start'",
             reply_markup=button
         )
+        del dictionary[id]
     else:
         for_errors(update, context)
 
