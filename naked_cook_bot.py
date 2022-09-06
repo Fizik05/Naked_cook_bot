@@ -56,19 +56,19 @@ def wake_up(update, context):
 def breakfast(update, context):
     id = update.effective_chat.id
     url = random.choice(recipes.recipes_breakfast)
-    responce = Get_URL(url)  #получаем данные сайта через requests
+    response = Get_URL(url)
 
     context.bot.send_message(
         id,
-        text=parser.GettingName(responce)
+        text=parser.GettingName(response)
     )
     context.bot.send_message(
         id,
-        text=parser.GettingIngridients(responce)
+        text=parser.GettingIngridients(response)
     )
     # context.bot.send_message(
     #     id,
-    #     text=Recipe
+    #     text=parser.GettingSteps(response)
     # )
     # context.bot.send_message(
     #     id,
@@ -101,21 +101,21 @@ def TextHandler(update, context):
     if 'Завтрак' in chat:
         context.bot.send_message(
             chat_id=id,
-            text='С добрым утром. \nНовый рецепт специально для тебя :)'
+            text='С добрым утром.\nНовый рецепт специально для тебя :)'
         )
         breakfast(update, context)
     elif 'Обед' in chat:
         context.bot.send_message(
             chat_id=id,
-            text='Добрый день. \nПриготовим что-нибудь вкусненькое ;)\nСегодня у нас: '
+            text='Добрый день.\nПриготовим что-нибудь вкусненькое ;)\nСегодня у нас: '
         )
         lunch(update, context)
     elif 'Ужин' in chat:
         context.bot.send_message(
             chat_id=id,
-            text='И снова привет. \nНачнём готовить)'
+            text='И снова привет.\nНачнём готовить)'
         )
-        dinner(update, context)       
+        dinner(update, context)
     else:
         for_errors(update, context)
 
