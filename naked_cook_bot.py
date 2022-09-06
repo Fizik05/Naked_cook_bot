@@ -129,10 +129,7 @@ def lunch(update, context):
 
         for i in instruction:
             array.append([i.description, i.image])
-            context.bot.send_message(
-            id,
-            text=parser.GettingName(response)
-        )
+
         context.bot.send_message(
             id,
             text=parser.GettingIngridients(response),
