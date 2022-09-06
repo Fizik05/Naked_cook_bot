@@ -1,3 +1,4 @@
+from logging.config import dictConfig
 import os
 
 import dotenv
@@ -17,7 +18,7 @@ dotenv.load_dotenv()
 
 token = os.getenv("TOKEN")
 updater = Updater(token=token)
-array = []
+dictionary = {}
 
 
 # def steal(update, context):
@@ -54,8 +55,9 @@ def wake_up(update, context):
         )
 
 
-def start_cooking(arr, upd, context):
+def start_cooking(upd, context):
     id = upd.effective_chat.id
+    arr = dictionary[id]
     if arr == []:
         button = ReplyKeyboardMarkup([["/start"]], resize_keyboard=True)
         context.bot.send_message(
@@ -66,8 +68,7 @@ def start_cooking(arr, upd, context):
     else:
         text = arr[0][0]
         image = "https:" + arr[0][1]
-        print(image)
-        del array[0]
+        del dictionary[id][0]
 
         context.bot.send_message(
             id,
@@ -88,6 +89,7 @@ def breakfast(update, context):
                                       ["Закончить готовку"]],
                                      resize_keyboard=True)
         instruction = parser.GettingSteps(response)
+        array = []
 
         for i in instruction:
             array.append([i.description, i.image])
@@ -101,8 +103,11 @@ def breakfast(update, context):
             text=parser.GettingIngridients(response),
             reply_markup=button
         )
-        start_cooking(array, update, context)
-    except:
+        dictionary[id] = array
+        del array
+        start_cooking(update, context)
+    except Exception as exs:
+        print(exs)
         button = ReplyKeyboardMarkup([["/start"]], resize_keyboard=True)
         context.bot.send_message(
             id,
@@ -112,11 +117,74 @@ def breakfast(update, context):
 
 
 def lunch(update, context):
-    pass
+    try:
+        id = update.effective_chat.id
+        url = random.choice(recipes.recipes_lunch)
+        response = Get_URL(url)
+        button = ReplyKeyboardMarkup([["Следующий шаг"],
+                                      ["Закончить готовку"]],
+                                     resize_keyboard=True)
+        instruction = parser.GettingSteps(response)
+        array = []
+
+        for i in instruction:
+            array.append([i.description, i.image])
+            context.bot.send_message(
+            id,
+            text=parser.GettingName(response)
+        )
+        context.bot.send_message(
+            id,
+            text=parser.GettingIngridients(response),
+            reply_markup=button
+        )
+        dictionary[id] = array
+        del array
+        start_cooking(update, context)
+    except Exception as exs:
+        print(exs)
+        button = ReplyKeyboardMarkup([["/start"]], resize_keyboard=True)
+        context.bot.send_message(
+            id,
+            text="У нас произошла ошибка на сервере, пожалуйста попробуйте снова)",
+            reply_markup=button
+        )
 
 
 def dinner(update, context):
-    pass
+    try:
+        id = update.effective_chat.id
+        url = random.choice(recipes.recipes_dinner)
+        response = Get_URL(url)
+        button = ReplyKeyboardMarkup([["Следующий шаг"],
+                                      ["Закончить готовку"]],
+                                     resize_keyboard=True)
+        instruction = parser.GettingSteps(response)
+        array = []
+
+        for i in instruction:
+            array.append([i.description, i.image])
+
+        context.bot.send_message(
+            id,
+            text=parser.GettingName(response)
+        )
+        context.bot.send_message(
+            id,
+            text=parser.GettingIngridients(response),
+            reply_markup=button
+        )
+        dictionary[id] = array
+        del array
+        start_cooking(update, context)
+    except Exception as exs:
+        print(exs)
+        button = ReplyKeyboardMarkup([["/start"]], resize_keyboard=True)
+        context.bot.send_message(
+            id,
+            text="У нас произошла ошибка на сервере, пожалуйста попробуйте снова)",
+            reply_markup=button
+        )
 
 
 def for_errors(update, context):
@@ -125,7 +193,7 @@ def for_errors(update, context):
 
     context.bot.send_message(
         chat_id=chat.id,
-        text="К сожалению, я не смог распознать твою команду:(\nПопробуй команду ниже;)",
+        text="К сожалению, я не смог распознать твою команду:(\nПопробуй команду ниже😉",
         reply_markup=button
     )
 
@@ -136,30 +204,31 @@ def TextHandler(update, context):
     if 'Завтрак' in chat:
         context.bot.send_message(
             chat_id=id,
-            text='С добрым утром.\nНовый рецепт специально для тебя :)'
+            text='С добрым утром😴\nНовый рецепт специально для тебя :)'
         )
         breakfast(update, context)
     elif 'Обед' in chat:
         context.bot.send_message(
             chat_id=id,
-            text='Добрый день.\nПриготовим что-нибудь вкусненькое ;)\nСегодня у нас: '
+            text='Добрый день.\nПриготовим что-нибудь вкусненькое ☺️\nСегодня у нас: '
         )
         lunch(update, context)
     elif 'Ужин' in chat:
         context.bot.send_message(
             chat_id=id,
-            text='И снова привет.\nНачнём готовить)'
+            text='И снова привет.\nНачнём готовить🙃'
         )
         dinner(update, context)
     elif 'Следующий шаг' in chat:
-        start_cooking(array, update, context)
+        start_cooking(update, context)
     elif "Закончить готовку" in chat:
         button = ReplyKeyboardMarkup([["/start"]], resize_keyboard=True)
         context.bot.send_message(
             chat_id=id,
-            text="Надеюсь тебе понравилось)\nЧтобы попробовать ещё раз введи команду  '/start'",
+            text="Надеюсь тебе понравилось❤️\nЧтобы попробовать ещё раз введи команду  '/start'",
             reply_markup=button
         )
+        del dictionary[id]
     else:
         for_errors(update, context)
 
