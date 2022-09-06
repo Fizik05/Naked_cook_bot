@@ -58,8 +58,7 @@ def start_cooking(upd, context):
     id = upd.effective_chat.id
     arr = dictionary[id]
     if arr == []:
-        del dictionary[id]
-        button = ReplyKeyboardMarkup([["/start"]])
+        button = ReplyKeyboardMarkup([["/start"]], resize_keyboard=True)
         context.bot.send_message(
             id,
             text="На этом готовка закончена. Нажмите '/start' чтобы посмотреть ещё один рецепт.",
@@ -82,29 +81,35 @@ def start_cooking(upd, context):
 
 
 def breakfast(update, context):
-    id = update.effective_chat.id
-    url = random.choice(recipes.recipes_breakfast)
-    response = Get_URL(url)
-    button = ReplyKeyboardMarkup([["Следующий шаг"],
-                                  ["Закончить готовку"]],
-                                 resize_keyboard=True)
-    instruction = parser.GettingSteps(response)
-    array = []
+    try:
+        id = update.effective_chat.id
+        url = random.choice(recipes.recipes_breakfast)
+        response = Get_URL(url)
+        button = ReplyKeyboardMarkup([["Следующий шаг"],
+                                      ["Закончить готовку"]],
+                                     resize_keyboard=True)
+        instruction = parser.GettingSteps(response)
 
-    for i in instruction:
-        array.append([i.description, i.image])
+        for i in instruction:
+            array.append([i.description, i.image])
 
-    dictionary[id] = array
-    context.bot.send_message(
-        id,
-        text=parser.GettingName(response)
-    )
-    context.bot.send_message(
-        id,
-        text=parser.GettingIngridients(response),
-        reply_markup=button
-    )
-    start_cooking(update, context)
+        context.bot.send_message(
+            id,
+            text=parser.GettingName(response)
+        )
+        context.bot.send_message(
+            id,
+            text=parser.GettingIngridients(response),
+            reply_markup=button
+        )
+        start_cooking(array, update, context)
+    except:
+        button = ReplyKeyboardMarkup([["/start"]], resize_keyboard=True)
+        context.bot.send_message(
+            id,
+            text="У нас произошла ошибка на сервере, пожалуйста попробуйте снова)",
+            reply_markup=button
+        )
 
 
 def lunch(update, context):
@@ -150,9 +155,11 @@ def TextHandler(update, context):
     elif 'Следующий шаг' in chat:
         start_cooking(update, context)
     elif "Закончить готовку" in chat:
+        button = ReplyKeyboardMarkup([["/start"]], resize_keyboard=True)
         context.bot.send_message(
             chat_id=id,
-            text="Надеюсь тебе понравилось)\nЧтобы попробовать ещё раз введи команду  '/start'"
+            text="Надеюсь тебе понравилось)\nЧтобы попробовать ещё раз введи команду  '/start'",
+            reply_markup=button
         )
     else:
         for_errors(update, context)
