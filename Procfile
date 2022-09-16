@@ -1,0 +1,1 @@
+worker: python naked_cook_bot.py
