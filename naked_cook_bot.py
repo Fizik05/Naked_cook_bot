@@ -33,7 +33,17 @@ dictionary = {}
 
 
 def Get_URL(url):
-    return requests.get(url).text
+    # return requests.get(url).text
+    response = requests.get("http://127.0.0.1:8000/recipes/1/").json()
+    print(response)
+    return response[0]["image"]
+
+
+def test_photo(update, context, image):
+    context.bot.send_photo(
+        update.effective_chat.id,
+        image,
+    )
 
 
 def wake_up(update, context):
@@ -71,6 +81,7 @@ def start_cooking(upd, context):
     else:
         text = arr[0][0]
         image = "https:" + arr[0][1]
+        print(image)
         del dictionary[id][0]
 
         context.bot.send_message(
@@ -88,6 +99,7 @@ def breakfast(update, context):
         id = update.effective_chat.id
         url = random.choice(recipes.recipes_breakfast)
         response = Get_URL(url)
+        test_photo(update, context, response)
         button = ReplyKeyboardMarkup([["Следующий шаг"],
                                       ["Закончить готовку"],
                                       ["Главное меню"]],
